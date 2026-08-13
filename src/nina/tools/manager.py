@@ -74,5 +74,5 @@ class ToolManager:
 
         try:
             return tool.func(**kwargs)
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return f"Error executing tool {name}: {e!s}"

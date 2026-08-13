@@ -256,7 +256,7 @@ def train_full_distilbert_on_cuda(
     start_train_time = time.perf_counter()
 
     print(f"Executing 3-epoch CUDA fine-tuning ({len(df_train)} samples, batch_size={batch_size}, grad_accum={grad_accum_steps}, fp16=True)...")
-    train_output = trainer.train()
+    trainer.train()
     train_duration_s = round(time.perf_counter() - start_train_time, 2)
 
     peak_alloc_mb = round(torch.cuda.max_memory_allocated(0) / (1024 * 1024), 2)

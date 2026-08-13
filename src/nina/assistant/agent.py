@@ -1,32 +1,31 @@
 """Main Assistant Loop tying together all subsystems."""
-import time
-from typing import Optional, Any
 from pathlib import Path
 
-from nina.core.logging import logger
-from nina.core.config import get_settings, NinaSettings
-from nina.engine import NinaEmotionEngine
-from nina.memory.context import ConversationMemory
-from nina.llm.provider import LLMProvider
-from nina.llm.ollama import OllamaProvider
-from nina.tts.engine import TTSProvider, LocalTTSProvider
-from nina.tools.manager import ToolManager
-from nina.tools.builtin import get_current_time, get_weather
 from nina.audio.recorder import MicrophoneRecorder
+from nina.core.config import NinaSettings, get_settings
+from nina.core.logging import logger
+from nina.engine import NinaEmotionEngine
+from nina.llm.ollama import OllamaProvider
+from nina.llm.provider import LLMProvider
+from nina.memory.context import ConversationMemory
+from nina.tools.builtin import get_current_time, get_weather
+from nina.tools.manager import ToolManager
+from nina.tts.engine import LocalTTSProvider, TTSProvider
 from nina.wakeword.detector import WakeWordDetector
+
 
 class NinaAssistant:
     """The central agent integrating all voice assistant components."""
 
     def __init__(
         self,
-        voice_engine: Optional[NinaEmotionEngine] = None,
-        llm: Optional[LLMProvider] = None,
-        tts: Optional[TTSProvider] = None,
-        memory: Optional[ConversationMemory] = None,
-        tools: Optional[ToolManager] = None,
-        wake_word: Optional[WakeWordDetector] = None,
-        settings: Optional[NinaSettings] = None
+        voice_engine: NinaEmotionEngine | None = None,
+        llm: LLMProvider | None = None,
+        tts: TTSProvider | None = None,
+        memory: ConversationMemory | None = None,
+        tools: ToolManager | None = None,
+        wake_word: WakeWordDetector | None = None,
+        settings: NinaSettings | None = None
     ):
         self.settings = settings or get_settings()
         self.voice_engine = voice_engine or NinaEmotionEngine(auto_preload=True)
@@ -58,7 +57,7 @@ class NinaAssistant:
             text = result.text.strip()
             emotion = result.emotion.value
             logger.info(f"User (Emotion: {emotion}): {text}")
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to process audio: {e}")
             return
 
@@ -79,7 +78,7 @@ class NinaAssistant:
             messages = [system_msg] + context
 
             response = self.llm.generate_response(messages, tools=self.tools.get_tools_schema())
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"LLM Generation failed: {e}")
             self.tts.speak("I'm sorry, I couldn't process that right now.")
             return
@@ -101,7 +100,7 @@ class NinaAssistant:
                 try:
                     messages = [system_msg] + self.memory.get_context_window()
                     response = self.llm.generate_response(messages)
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     logger.error(f"LLM Generation after tool failed: {e}")
                     self.tts.speak("I had trouble understanding the tool results.")
                     return
@@ -131,7 +130,7 @@ class NinaAssistant:
                 try:
                     recorded_path = recorder.record_to_wav(temp_wav, duration_seconds=4.0)
                     self.process_turn(recorded_path)
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     logger.error(f"Recording failed: {e}")
                 turn_idx += 1
         except KeyboardInterrupt:

@@ -16,7 +16,7 @@ class OllamaProvider(LLMProvider):
         self.base_url = base_url.rstrip("/")
         self.model_name = model_name
 
-    def generate_response(self, messages: list[dict[str, str]], tools: list[dict[str, Any]] = None) -> dict[str, Any]:
+    def generate_response(self, messages: list[dict[str, str]], tools: list[dict[str, Any]] | None = None) -> dict[str, Any]:
         """Generate a response using Ollama API."""
         url = f"{self.base_url}/api/chat"
 
@@ -61,14 +61,13 @@ class OllamaProvider(LLMProvider):
         }
 
         try:
-            with httpx.Client(timeout=60.0) as client:
-                with client.stream("POST", url, json=payload) as response:
-                    response.raise_for_status()
-                    for line in response.iter_lines():
-                        if line:
-                            data = json.loads(line)
-                            if "message" in data and "content" in data["message"]:
-                                yield data["message"]["content"]
+            with httpx.Client(timeout=60.0) as client, client.stream("POST", url, json=payload) as response:
+                response.raise_for_status()
+                for line in response.iter_lines():
+                    if line:
+                        data = json.loads(line)
+                        if "message" in data and "content" in data["message"]:
+                            yield data["message"]["content"]
         except Exception as e:
             logger.error(f"Error streaming from Ollama: {e}")
             raise

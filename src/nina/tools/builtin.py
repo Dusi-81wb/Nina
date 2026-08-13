@@ -4,7 +4,7 @@ from datetime import datetime
 
 def get_current_time() -> str:
     """Get the current time and date."""
-    now = datetime.now()
+    now = datetime.now(tz=datetime.now().astimezone().tzinfo)
     return now.strftime("The current date and time is %Y-%m-%d %H:%M:%S")
 
 def get_weather(location: str) -> str:

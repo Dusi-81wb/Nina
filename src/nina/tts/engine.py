@@ -22,7 +22,7 @@ class LocalTTSProvider(TTSProvider):
             self.engine.setProperty('rate', rate)
             self.engine.setProperty('volume', volume)
             self._available = True
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Failed to initialize pyttsx3: {e}")
             self._available = False
 
@@ -37,5 +37,5 @@ class LocalTTSProvider(TTSProvider):
         try:
             self.engine.say(text)
             self.engine.runAndWait()
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             logger.error(f"Error during TTS playback: {e}")

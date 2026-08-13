@@ -207,7 +207,7 @@ def process_and_deduplicate(all_records):
     print(f"Total Raw Records Evaluated: {len(all_records)}")
     print(f"Successfully Mapped:        {len(mapped_records)}")
     print(f"Discarded / Unmapped:       {len(discarded_records)}")
-    print(f"Discarded Raw Labels Found: {sorted(list(unmapped_labels))}\n")
+    print(f"Discarded Raw Labels Found: {sorted(unmapped_labels)}\n")
 
     # Conflict Analysis
     norm_text_to_emotions = {}

@@ -16,7 +16,7 @@ class ConversationMemory:
         self.max_history = max_history
         self._messages: list[Message] = []
 
-    def add_message(self, role: str, content: str, metadata: dict[str, Any] = None) -> None:
+    def add_message(self, role: str, content: str, metadata: dict[str, Any] | None = None) -> None:
         """Add a message to the history."""
         if metadata is None:
             metadata = {}
