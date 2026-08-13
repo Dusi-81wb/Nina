@@ -1,6 +1,7 @@
 """Unit tests for Conversation Memory subsystem."""
 from nina.memory.context import ConversationMemory
 
+
 def test_memory_add_and_retrieve():
     memory = ConversationMemory()
     memory.add_message("user", "Hello Nina")

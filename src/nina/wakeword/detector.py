@@ -1,6 +1,7 @@
 """Wake word detection subsystem."""
 import numpy as np
 
+
 class WakeWordDetector:
     """Detects wake words in audio streams (Stub implementation)."""
 

@@ -1,10 +1,13 @@
 """Ollama LLM Provider implementation."""
-import httpx
-from typing import List, Dict, Any, Generator
 import json
+from collections.abc import Generator
+from typing import Any
 
-from nina.llm.provider import LLMProvider
+import httpx
+
 from nina.core.logging import logger
+from nina.llm.provider import LLMProvider
+
 
 class OllamaProvider(LLMProvider):
     """Provider for local Ollama LLMs."""
@@ -13,7 +16,7 @@ class OllamaProvider(LLMProvider):
         self.base_url = base_url.rstrip("/")
         self.model_name = model_name
 
-    def generate_response(self, messages: List[Dict[str, str]], tools: List[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def generate_response(self, messages: list[dict[str, str]], tools: list[dict[str, Any]] = None) -> dict[str, Any]:
         """Generate a response using Ollama API."""
         url = f"{self.base_url}/api/chat"
 
@@ -47,7 +50,7 @@ class OllamaProvider(LLMProvider):
             logger.error(f"Error parsing Ollama response: {e}")
             raise
 
-    def stream_response(self, messages: List[Dict[str, str]]) -> Generator[str, None, None]:
+    def stream_response(self, messages: list[dict[str, str]]) -> Generator[str, None, None]:
         """Stream a response using Ollama API."""
         url = f"{self.base_url}/api/chat"
 

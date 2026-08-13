@@ -1,9 +1,9 @@
 """Comprehensive PyTorch CUDA GPU verification, tiny overfit test, and 3-epoch DistilBERT fine-tuning pipeline for NVIDIA GeForce RTX 4050 Laptop GPU (6 GB VRAM)."""
 
 import json
-from pathlib import Path
 import time
-from typing import Any, Dict
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -17,11 +17,8 @@ from transformers import (
     TrainingArguments,
 )
 
-from nina.api.schemas import SupportedEmotion
 from nina.core.exceptions import NinaException
 from nina.core.logging import logger
-from nina.emotion.evaluator import EmotionEvaluator
-from nina.emotion.mapping import EmotionLabelMapper
 from nina.emotion.trainer import (
     ID_TO_LABEL,
     LABEL_TO_ID,
@@ -39,7 +36,7 @@ METRICS_DIR.mkdir(parents=True, exist_ok=True)
 CUDA_MODEL_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def verify_cuda_environment() -> Dict[str, Any]:
+def verify_cuda_environment() -> dict[str, Any]:
     """Verify PyTorch CUDA hardware acceleration, device name, VRAM, and tensor operation on GPU."""
     print("==================================================")
     print("      STEP 1: PYTORCH CUDA HARDWARE VERIFICATION  ")
@@ -84,7 +81,7 @@ def verify_cuda_environment() -> Dict[str, Any]:
     }
 
 
-def run_cuda_tiny_overfit_test(df_train: pd.DataFrame) -> Dict[str, Any]:
+def run_cuda_tiny_overfit_test(df_train: pd.DataFrame) -> dict[str, Any]:
     """Run a controlled 10-epoch overfit sanity experiment on 120 samples strictly on CUDA:0."""
     print("==================================================")
     print("      STEP 2: CUDA TINY DATASET OVERFIT SANITY    ")
@@ -93,7 +90,7 @@ def run_cuda_tiny_overfit_test(df_train: pd.DataFrame) -> Dict[str, Any]:
     # Select 120 samples (20 per class)
     tiny_df, _ = train_test_split(df_train, train_size=120, stratify=df_train["emotion"], random_state=42)
 
-    print(f"Tiny Overfit Dataset Size: 120 samples (20 per class)")
+    print("Tiny Overfit Dataset Size: 120 samples (20 per class)")
 
     tokenizer = AutoTokenizer.from_pretrained("distilbert-base-uncased")
     model = AutoModelForSequenceClassification.from_pretrained(
@@ -172,7 +169,7 @@ def run_cuda_tiny_overfit_test(df_train: pd.DataFrame) -> Dict[str, Any]:
 
 def train_full_distilbert_on_cuda(
     df_train: pd.DataFrame, df_val: pd.DataFrame, df_test: pd.DataFrame
-) -> Dict[str, Any]:
+) -> dict[str, Any]:
     """Fine-tune DistilBERT on CUDA GPU for 3 full epochs across the 69,726 training dataset."""
     print("==================================================")
     print("      STEP 3: FULL DISTILBERT FINE-TUNING ON CUDA ")
@@ -378,7 +375,7 @@ def test_checkpoint_reloading(df_test: pd.DataFrame) -> None:
         preds_cpu = torch.argmax(logits_cpu, dim=-1).numpy()
     cpu_lat_ms = round(((time.perf_counter() - start_cpu) * 1000.0) / len(sample_texts), 3)
 
-    print(f"Reload Benchmark (50 samples):")
+    print("Reload Benchmark (50 samples):")
     print(f"  CUDA GPU Inference Latency: {gpu_lat_ms} ms / sample")
     print(f"  CPU Inference Latency:      {cpu_lat_ms} ms / sample")
 
@@ -386,7 +383,7 @@ def test_checkpoint_reloading(df_test: pd.DataFrame) -> None:
     print("STATUS: Checkpoint reload and prediction consistency verified! [ OK ]\n")
 
 
-def run_complete_cuda_training_pipeline() -> Dict[str, Any]:
+def run_complete_cuda_training_pipeline() -> dict[str, Any]:
     """Execute complete PyTorch CUDA verification, tiny overfit test, full 3-epoch GPU fine-tuning, and reload test."""
     gpu_info = verify_cuda_environment()
     df_train, df_val, df_test = verify_dataset_integrity()

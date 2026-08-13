@@ -1,8 +1,9 @@
 """Unit tests for the LLM Provider integration."""
-import pytest
-import respx
 import httpx
+import respx
+
 from nina.llm.ollama import OllamaProvider
+
 
 @respx.mock
 def test_ollama_generate_response_success():

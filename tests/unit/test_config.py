@@ -1,7 +1,7 @@
 import pytest
+
 """Unit tests for configuration system management."""
 
-import os
 
 from nina.core.config import NinaSettings, get_settings
 

@@ -1,12 +1,14 @@
 """Base interfaces for LLM providers."""
 from abc import ABC, abstractmethod
-from typing import List, Dict, Any, Generator
+from collections.abc import Generator
+from typing import Any
+
 
 class LLMProvider(ABC):
     """Abstract base class for LLM communication."""
 
     @abstractmethod
-    def generate_response(self, messages: List[Dict[str, str]], tools: List[Dict[str, Any]] = None) -> Dict[str, Any]:
+    def generate_response(self, messages: list[dict[str, str]], tools: list[dict[str, Any]] = None) -> dict[str, Any]:
         """
         Generate a response from the LLM given a conversation history.
 
@@ -17,9 +19,7 @@ class LLMProvider(ABC):
         Returns:
             Dictionary containing the response 'content' and optional 'tool_calls'
         """
-        pass
 
     @abstractmethod
-    def stream_response(self, messages: List[Dict[str, str]]) -> Generator[str, None, None]:
+    def stream_response(self, messages: list[dict[str, str]]) -> Generator[str, None, None]:
         """Stream a response back."""
-        pass

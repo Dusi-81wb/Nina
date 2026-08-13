@@ -1,6 +1,7 @@
 """Unit tests for the Tools subsystem."""
 from nina.tools.manager import ToolManager
 
+
 def dummy_tool(x: int, y: str) -> str:
     """A dummy tool for testing."""
     return f"{y}{x}"

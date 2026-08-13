@@ -1,6 +1,7 @@
 """Built-in tools for the assistant."""
 from datetime import datetime
 
+
 def get_current_time() -> str:
     """Get the current time and date."""
     now = datetime.now()

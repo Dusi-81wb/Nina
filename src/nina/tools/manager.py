@@ -1,7 +1,10 @@
 """Tool management system for the AI assistant."""
-from typing import Dict, Any, Callable, List
-from pydantic import BaseModel
 import inspect
+from collections.abc import Callable
+from typing import Any
+
+from pydantic import BaseModel
+
 
 class Tool(BaseModel):
     name: str
@@ -12,7 +15,7 @@ class ToolManager:
     """Manages tool registration and execution."""
 
     def __init__(self):
-        self._tools: Dict[str, Tool] = {}
+        self._tools: dict[str, Tool] = {}
 
     def register_tool(self, name: str, description: str, func: Callable) -> None:
         """Register a new tool."""
@@ -22,11 +25,11 @@ class ToolManager:
         """Get a tool by name."""
         return self._tools.get(name)
 
-    def get_all_tools(self) -> List[Tool]:
+    def get_all_tools(self) -> list[Tool]:
         """Get all registered tools."""
         return list(self._tools.values())
 
-    def get_tools_schema(self) -> List[Dict[str, Any]]:
+    def get_tools_schema(self) -> list[dict[str, Any]]:
         """Get schema of all tools for LLM consumption."""
         schemas = []
         for tool in self._tools.values():
@@ -63,7 +66,7 @@ class ToolManager:
             })
         return schemas
 
-    def execute_tool(self, name: str, kwargs: Dict[str, Any]) -> Any:
+    def execute_tool(self, name: str, kwargs: dict[str, Any]) -> Any:
         """Execute a tool by name with given arguments."""
         tool = self.get_tool(name)
         if not tool:
@@ -72,4 +75,4 @@ class ToolManager:
         try:
             return tool.func(**kwargs)
         except Exception as e:
-            return f"Error executing tool {name}: {str(e)}"
+            return f"Error executing tool {name}: {e!s}"

@@ -6,12 +6,11 @@ Does NOT overwrite production artifacts/models/classical_baseline.joblib.
 """
 
 import json
-from pathlib import Path
 import time
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
-import torch
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
 from transformers import (
@@ -21,8 +20,6 @@ from transformers import (
     TrainingArguments,
 )
 
-from nina.api.schemas import SupportedEmotion
-from nina.emotion.evaluator import EmotionEvaluator
 from nina.emotion.trainer import (
     ID_TO_LABEL,
     LABEL_TO_ID,

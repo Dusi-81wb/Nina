@@ -1,8 +1,10 @@
 """Text-to-Speech (TTS) integration."""
 from abc import ABC, abstractmethod
+
 import pyttsx3
 
 from nina.core.logging import logger
+
 
 class TTSProvider(ABC):
     """Abstract base class for TTS engines."""
@@ -10,7 +12,6 @@ class TTSProvider(ABC):
     @abstractmethod
     def speak(self, text: str) -> None:
         """Convert text to speech and play it."""
-        pass
 
 class LocalTTSProvider(TTSProvider):
     """Local TTS using pyttsx3."""
