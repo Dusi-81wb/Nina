@@ -258,6 +258,33 @@ def run_evaluate(args: argparse.Namespace) -> int:
         return 1
 
 
+def run_assistant(args: argparse.Namespace) -> int:
+    """Run the main AI Voice Assistant loop."""
+    print("\n==================================================")
+    print("      NINA VOICE ASSISTANT AGENT LOOP            ")
+    print("==================================================\n")
+    try:
+        from nina.assistant.agent import NinaAssistant
+        assistant = NinaAssistant()
+        assistant.start_listening()
+        return 0
+    except Exception as e:
+        print(f"ERROR: Agent loop failed: {e!s}\n")
+        return 1
+
+def run_config(args: argparse.Namespace) -> int:
+    """Display current system configuration."""
+    from nina.core.config import get_settings
+    settings = get_settings()
+    print("\n==================================================")
+    print("      NINA CONFIGURATION                         ")
+    print("==================================================\n")
+    for key, val in settings.model_dump().items():
+        print(f"  {key:<30} {val}")
+    print("\n==================================================\n")
+    return 0
+
+
 def run_listen(args: argparse.Namespace) -> int:
     """Diagnostic audio-to-emotion detection runner returning EmotionResult payload."""
     audio_file = getattr(args, "audio_file", None)
@@ -413,6 +440,12 @@ def main() -> int:
     lst_parser.add_argument("--stub", action="store_true", help="Use stub ASR mock for dev testing")
     lst_parser.add_argument("--classical", action="store_true", help="Use classical baseline emotion classifier")
 
+    # nina assistant
+    ast_parser = subparsers.add_parser("assistant", help="Run the full conversational AI Voice Assistant loop")
+
+    # nina config
+    cfg_parser = subparsers.add_parser("config", help="View current system configuration")
+
     args = parser.parse_args()
 
     if not args.command:
@@ -433,6 +466,10 @@ def main() -> int:
         return run_evaluate(args)
     elif args.command == "listen":
         return run_listen(args)
+    elif args.command == "assistant":
+        return run_assistant(args)
+    elif args.command == "config":
+        return run_config(args)
     else:
         parser.print_help()
         return 0

@@ -65,6 +65,13 @@ class NinaSettings(BaseSettings):
     api_host: str = "127.0.0.1"
     api_port: int = 8000
 
+    # Assistant Loop Settings
+    ollama_url: str = "http://localhost:11434"
+    ollama_model: str = "llama3"
+    wake_word_enabled: bool = True
+    wake_word_threshold: float = 0.5
+    tts_enabled: bool = True
+
 
 def get_settings() -> NinaSettings:
     """Instantiate and validate settings from environment variables."""

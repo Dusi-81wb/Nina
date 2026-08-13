@@ -11,30 +11,26 @@
 
 ## 1. What Nina Is
 
-**Nina** is a modular, production-grade **Voice-to-Text Emotion Detection Component** for parent applications.
+**Nina** is a modular, reliable, local-first **AI Voice Assistant**.
 
-Nina is **NOT** a standalone chatbot or conversational voice assistant. Nina does **NOT** generate dialogue responses, host local LLMs (Ollama/llama), execute Text-to-Speech (pyttsx3/TTS), or maintain conversation memory.
+Nina has evolved from a pure emotion detection component into a fully-fledged conversational assistant. It handles the entire pipeline: wake word detection, speech recognition, emotion understanding, conversation memory, tool execution, LLM reasoning, and text-to-speech output.
 
-### Core Component Architecture:
+### Core Assistant Architecture:
 
 ```
-USER VOICE / AUDIO SIGNAL
+MICROPHONE / AUDIO INPUT
         ↓
-MICROPHONE / WAV AUDIO FILE
+WAKE WORD DETECTION (Stub/VAD)
         ↓
-VOICE ACTIVITY DETECTION (VAD) — Trimming Background Silence
+SPEECH-TO-TEXT (FasterWhisper) -> EMOTION CLASSIFICATION (DistilBERT/Classical)
         ↓
-SPEECH-TO-TEXT (FasterWhisper ASR) — Speech Transcription
+CONVERSATION MEMORY & INTENT DETECTION
         ↓
-TEXT PREPROCESSING (NLP Normalizer) — Tokenization & Modifiers
+LLM REASONING (Ollama / Local LLM)
         ↓
-EMOTION CLASSIFICATION (CUDA DistilBERT / CPU TF-IDF Fallback)
+TOOL EXECUTION (Time, Weather, etc.) -> CONVERSATION UPDATE
         ↓
-OPTIONAL INTENSITY ENGINE (Phase 5 Sub-Score Calculation)
-        ↓
-STRUCTURED RESULT (EmotionResult)
-        ↓
-PARENT APPLICATION
+TEXT-TO-SPEECH (TTS / pyttsx3) -> AUDIO OUTPUT
 ```
 
 ---
@@ -101,13 +97,32 @@ python -m nina.cli classify "I AM SO EXTREMELY HAPPY TODAY!!!"
 # 6. Record microphone audio to WAV file
 python -m nina.cli record --duration 3 --output test.wav
 
-# 7. Run complete automated test suite (72 tests)
+# 7. Start the main AI Voice Assistant Loop
+python -m nina.cli assistant
+
+# 8. View system configuration
+python -m nina.cli config
+
+# 9. Run complete automated test suite
 pytest
 ```
 
 ---
 
-## 5. Comprehensive Documentation
+## 5. System Configuration
+
+Nina is configured via environment variables or a `.env` file. You can copy the template:
+`cp .env.example .env`
+
+Key configurations:
+* `NINA_OLLAMA_URL`: URL to your local Ollama instance (default: `http://localhost:11434`)
+* `NINA_OLLAMA_MODEL`: LLM Model for Ollama to use (default: `llama3`)
+* `NINA_WAKE_WORD_ENABLED`: Enable/disable wake word (default: `true`)
+* `NINA_TTS_ENABLED`: Enable text-to-speech output (default: `true`)
+
+---
+
+## 6. Comprehensive Documentation
 
 * 📖 **[Full Technical Report](docs/NINA_TECHNICAL_REPORT.md):** Complete hardware requirements, model benchmarks, pipeline stages, and full codebase specification.
 * 🔌 **[Parent Project Integration Guide](docs/integration.md):** Programmatic API usage and `EmotionResult` data contracts for parent applications.
