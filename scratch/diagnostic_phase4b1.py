@@ -1,16 +1,17 @@
 """Programmatic diagnostic script for Phase 4B.1 DistilBERT inspection, label verification, tokenization audit, and tiny-dataset overfit sanity test."""
 
-import csv
-import json
-from pathlib import Path
-import time
 
 import numpy as np
 import pandas as pd
 import torch
-from transformers import AutoModelForSequenceClassification, AutoTokenizer, Trainer, TrainingArguments
 from datasets import Dataset
 from sklearn.model_selection import train_test_split
+from transformers import (
+    AutoModelForSequenceClassification,
+    AutoTokenizer,
+    Trainer,
+    TrainingArguments,
+)
 
 from nina.api.schemas import SupportedEmotion
 from nina.emotion.mapping import EmotionLabelMapper

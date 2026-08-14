@@ -1,6 +1,7 @@
+import pytest
+
 """Unit tests for configuration system management."""
 
-import os
 
 from nina.core.config import NinaSettings, get_settings
 
@@ -14,7 +15,7 @@ def test_default_settings() -> None:
     assert "best_model" in str(settings.emotion_model_name) or "roberta" in str(settings.emotion_model_name)
 
 
-def test_env_override(monkeypatch: os.MonkeyPatch) -> None:
+def test_env_override(monkeypatch: pytest.MonkeyPatch) -> None:
     """Verify environment variables override default settings."""
     monkeypatch.setenv("NINA_LOG_LEVEL", "DEBUG")
     monkeypatch.setenv("NINA_DEVICE", "cpu")

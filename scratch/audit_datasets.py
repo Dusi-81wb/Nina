@@ -2,9 +2,8 @@
 
 import csv
 import hashlib
-import json
-from pathlib import Path
 import re
+from pathlib import Path
 
 RAW_DIR = Path("data/raw")
 PROCESSED_DIR = Path("data/processed")
@@ -49,7 +48,6 @@ AMBIGUOUS_LABELS = {
     "relief",
     "boredom",
     "empty",
-    "enthusiasm",
     "pity",
 }
 
@@ -209,7 +207,7 @@ def process_and_deduplicate(all_records):
     print(f"Total Raw Records Evaluated: {len(all_records)}")
     print(f"Successfully Mapped:        {len(mapped_records)}")
     print(f"Discarded / Unmapped:       {len(discarded_records)}")
-    print(f"Discarded Raw Labels Found: {sorted(list(unmapped_labels))}\n")
+    print(f"Discarded Raw Labels Found: {sorted(unmapped_labels)}\n")
 
     # Conflict Analysis
     norm_text_to_emotions = {}
@@ -294,7 +292,7 @@ def create_splits_and_save(candidate_records):
     val_data = shuffled[train_end:val_end]
     test_data = shuffled[val_end:]
 
-    print(f"\nCreated Reproducible 80/10/10 Splits:")
+    print("\nCreated Reproducible 80/10/10 Splits:")
     print(f"  Train Set:      {len(train_data)} ({len(train_data)/total*100:.1f}%)")
     print(f"  Validation Set: {len(val_data)} ({len(val_data)/total*100:.1f}%)")
     print(f"  Test Set:       {len(test_data)} ({len(test_data)/total*100:.1f}%)")
@@ -307,7 +305,7 @@ def create_splits_and_save(candidate_records):
     val_leak = train_texts.intersection(val_texts)
     test_leak = train_texts.intersection(test_texts).union(val_texts.intersection(test_texts))
 
-    print(f"\nData Leakage Check:")
+    print("\nData Leakage Check:")
     print(f"  Train <-> Val Overlap:  {len(val_leak)}")
     print(f"  Train/Val <-> Test Overlap: {len(test_leak)}")
 
