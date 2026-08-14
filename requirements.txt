@@ -19,6 +19,9 @@ fastapi>=0.104.0
 uvicorn>=0.24.0
 httpx>=0.28.1
 
+# ML Utilities
+joblib>=1.3.0
+
 # TTS
 pyttsx3>=2.90
 
